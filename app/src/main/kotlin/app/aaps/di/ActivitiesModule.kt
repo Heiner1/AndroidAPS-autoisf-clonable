@@ -6,6 +6,7 @@ import app.aaps.activities.MyPreferenceFragment
 import app.aaps.activities.PreferencesActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
+import app.aaps.activities.WizardLaunchActivity
 
 @Module
 @Suppress("unused")
@@ -15,4 +16,5 @@ abstract class ActivitiesModule {
     @ContributesAndroidInjector abstract fun contributesMainActivity(): MainActivity
     @ContributesAndroidInjector abstract fun contributesPreferencesActivity(): PreferencesActivity
     @ContributesAndroidInjector abstract fun contributesPreferencesFragment(): MyPreferenceFragment
+    @ContributesAndroidInjector abstract fun contributesWizardLaunchActivity(): WizardLaunchActivity
 }
