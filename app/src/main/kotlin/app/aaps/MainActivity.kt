@@ -123,8 +123,30 @@ class MainActivity : DaggerAppCompatActivityWithResult() {
         actionBarDrawerToggle = ActionBarDrawerToggle(this, binding.mainDrawerLayout, R.string.open_navigation, R.string.close_navigation).also {
             binding.mainDrawerLayout.addDrawerListener(it)
             it.syncState()
+            handleExternalWizardIntent(intent)
         }
+        override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleExternalWizardIntent(intent)
+    }
+    private fun handleExternalWizardIntent(intent: Intent?) {
+        val carbs = intent?.getIntExtra("open_wizard_carbs", 0) ?: 0
+        if (carbs <= 0) return
 
+        val notes = intent.getStringExtra("open_wizard_notes") ?: ""
+
+        // Extras "verbrauchen", damit sie beim nächsten Lifecycle nicht erneut feuern
+        intent.removeExtra("open_wizard_carbs")
+        intent.removeExtra("open_wizard_notes")
+
+        val wizard = app.aaps.ui.dialogs.WizardDialog()
+        wizard.arguments = Bundle().apply {
+            putDouble("carbs_input", carbs.toDouble())
+            putString("notes_input", notes)
+        }
+        wizard.show(supportFragmentManager, "WizardDialog")
+    }
         // initialize screen wake lock
         processPreferenceChange(EventPreferenceChange(BooleanKey.OverviewKeepScreenOn.key))
 
